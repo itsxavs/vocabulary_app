@@ -4,15 +4,21 @@
       "words": [
         {
           "english": "such as",
-          "spanish": "por ejempl"
+          "spanish": "por ejempl",
+          "synonyms": [],
+          "examples": []
         },
         {
           "english": "sdfdfsdf",
-          "spanish": "sdfsdf"
+          "spanish": "sdfsdf",
+          "synonyms": [],
+          "examples": []
         },
         {
           "english": "fsfdsdf",
-          "spanish": "sdfsdf"
+          "spanish": "sdfsdf",
+          "synonyms": [],
+          "examples": []
         }
       ],
       "color": "#667eea",
@@ -22,11 +28,15 @@
       "words": [
         {
           "english": "glasses",
-          "spanish": "gafas"
+          "spanish": "gafas",
+          "synonyms": [],
+          "examples": []
         },
         {
           "english": "sdfsdf",
-          "spanish": "sdfsd"
+          "spanish": "sdfsd",
+          "synonyms": [],
+          "examples": []
         }
       ],
       "color": "#ea6674",
@@ -36,7 +46,9 @@
       "words": [
         {
           "english": "dfds",
-          "spanish": "sdds"
+          "spanish": "sdds",
+          "synonyms": [],
+          "examples": []
         }
       ],
       "color": "#bc66ea",

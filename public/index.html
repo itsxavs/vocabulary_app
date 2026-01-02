@@ -31,14 +31,16 @@
         <div class="section">
           <h3>📥 Downloads</h3>
           <button onclick="downloadPDF()" class="btn btn-success" style="margin-bottom: 8px;">📄 Download PDF</button>
-          <button onclick="downloadJSON()" class="btn btn-info">💾 Download JSON</button>
+          <!-- <button onclick="downloadJSON()" class="btn btn-info">💾 Download JSON</button> -->
         </div>
 
         <div class="section">
           <h3>📤 Import</h3>
-          <button onclick="document.getElementById('importFile').click()" class="btn btn-info">📂 Import JSON</button>
+          <!-- <button onclick="document.getElementById('importFile').click()" class="btn btn-info" style="margin-bottom: 8px;">📂 Import JSON</button> -->
+          <button onclick="document.getElementById('importPdfFile').click()" class="btn btn-info">📄 Import PDF</button>
           <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
-          <p style="font-size: 0.85em; color: #999; margin-top: 8px;">Upload a JSON file to restore categories and words</p>
+          <input type="file" id="importPdfFile" accept=".pdf" style="display:none" onchange="importPDF(event)">
+          <p style="font-size: 0.85em; color: #999; margin-top: 8px;">Upload a JSON or PDF file to restore categories and words</p>
         </div>
 
         <div class="section">

@@ -451,6 +451,37 @@ async function importJSON(event) {
   }
 }
 
+async function importPDF(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch('/api/import-pdf', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      alert('Error: ' + result.error);
+      return;
+    }
+
+    if (result.categories) {
+      showImportJSONDialog(result.categories, result.count);
+    } else {
+      alert(result.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error importing PDF: ' + error.message);
+  }
+}
+
 let currentImportData = null;
 
 function showImportJSONDialog(data, totalWords) {

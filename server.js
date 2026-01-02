@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 const PDFDocument = require('pdfkit');
-const pdfjs = require('pdfjs-dist/legacy/build/pdf');
 const fs = require('fs');
 const path = require('path');
 
@@ -77,25 +76,6 @@ app.put('/api/category/:oldName', (req, res) => {
   res.json({ success: true });
 });
 
-// Update word in category
-app.put('/api/word/:category/:index', (req, res) => {
-  const { category, index } = req.params;
-  const { english, spanish } = req.body;
-
-  const data = readData();
-  if (!data.categories[category]) {
-    return res.status(400).json({ error: 'Category does not exist' });
-  }
-
-  if (!data.categories[category].words[index]) {
-    return res.status(400).json({ error: 'Word does not exist' });
-  }
-
-  data.categories[category].words[index] = { english, spanish };
-  writeData(data);
-  res.json({ success: true });
-});
-
 // Reorder categories
 app.post('/api/reorder-categories', (req, res) => {
   const { order } = req.body;
@@ -113,7 +93,7 @@ app.post('/api/reorder-categories', (req, res) => {
 
 // Add word to category
 app.post('/api/word', (req, res) => {
-  const { category, english, spanish } = req.body;
+  const { category, english, spanish, synonyms, examples } = req.body;
   if (!category || !english || !spanish) {
     return res.status(400).json({ error: 'Required fields' });
   }
@@ -123,7 +103,12 @@ app.post('/api/word', (req, res) => {
     return res.status(400).json({ error: 'Category does not exist' });
   }
 
-  data.categories[category].words.push({ english, spanish });
+  data.categories[category].words.push({ 
+    english, 
+    spanish,
+    synonyms: synonyms || [],
+    examples: examples || []
+  });
   writeData(data);
   res.json({ success: true });
 });
@@ -152,7 +137,41 @@ app.delete('/api/category/:name', (req, res) => {
   res.json({ success: true });
 });
 
-// Download PDF
+// Update word in category
+app.put('/api/word/:category/:index', (req, res) => {
+  const { category, index } = req.params;
+  const { english, spanish, synonyms, examples } = req.body;
+
+  const data = readData();
+  if (!data.categories[category]) {
+    return res.status(400).json({ error: 'Category does not exist' });
+  }
+
+  if (!data.categories[category].words[index]) {
+    return res.status(400).json({ error: 'Word does not exist' });
+  }
+
+  data.categories[category].words[index] = { 
+    english, 
+    spanish,
+    synonyms: synonyms || [],
+    examples: examples || []
+  };
+  writeData(data);
+  res.json({ success: true });
+});
+
+// Helper function to escape XML special characters
+function escapeXml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+// Download PDF with embedded JSON metadata
 app.get('/api/download-pdf', (req, res) => {
   const data = readData();
   const doc = new PDFDocument({ margin: 30, size: 'A4' });
@@ -162,6 +181,18 @@ app.get('/api/download-pdf', (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
 
   doc.pipe(res);
+
+  // Add XMP metadata with JSON data
+  const xmpMetadata = `<?xml version="1.0" encoding="UTF-8"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/">
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdf:Description rdf:about="" xmlns:custom="http://vocabulary-manager.local/">
+      <custom:vocabularyData>${escapeXml(JSON.stringify(data.categories))}</custom:vocabularyData>
+    </rdf:Description>
+  </rdf:RDF>
+</x:xmpmeta>`;
+
+  doc.info.Custom = xmpMetadata;
 
   const sortedCategories = Object.entries(data.categories)
     .sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
@@ -195,7 +226,13 @@ app.get('/api/download-pdf', (req, res) => {
     // Words in compact list format
     words.forEach((word, wordIndex) => {
       const yPosition = doc.y;
-      const lineHeight = 20;
+      let lineHeight = 20;
+      
+      // Calculate height needed for synonyms and examples
+      const synonyms = word.synonyms || [];
+      const examples = word.examples || [];
+      if (synonyms.length > 0) lineHeight += 12;
+      if (examples.length > 0) lineHeight += 12 * examples.length;
       
       // Check if we need a new page
       if (yPosition + lineHeight > pageHeight - 30) {
@@ -223,11 +260,25 @@ app.get('/api/download-pdf', (req, res) => {
       
       // Arrow separator in category color
       doc.fontSize(11).fillColor(color).font('Helvetica');
-      doc.text('  :  ', { continued: true });
+      doc.text('  ➜  ', { continued: true });
       
       // Spanish translation (regular, not bold, black)
       doc.fontSize(12).font('Helvetica').fillColor('#333');
       doc.text(word.spanish);
+      
+      // Synonyms
+      if (synonyms.length > 0) {
+        doc.fontSize(9).fillColor('#999').font('Helvetica-Oblique');
+        doc.text(`Synonyms: ${synonyms.join(', ')}`, 38, doc.y);
+      }
+      
+      // Examples
+      if (examples.length > 0) {
+        examples.forEach(example => {
+          doc.fontSize(9).fillColor('#666').font('Helvetica');
+          doc.text(`• "${example}"`, 38, doc.y);
+        });
+      }
       
       doc.moveDown(1.3);
     });
@@ -236,40 +287,51 @@ app.get('/api/download-pdf', (req, res) => {
   doc.end();
 });
 
-// Función auxiliar para convertir hex a RGB
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : { r: 102, g: 126, b: 234 };
-}
-
-// Import PDF and extract text
+// Import PDF and extract metadata
 app.post('/api/import-pdf', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'File required' });
   }
 
   try {
-    fs.unlinkSync(req.file.path);
-  } catch (e) {}
-  
-  res.status(400).json({ error: 'Please use the JSON import option instead' });
-});
-
-// Alternative route: Import PDF generated by our app (simpler)
-app.post('/api/import-pdf-simple', upload.single('file'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'File required' });
+    const pdfBuffer = fs.readFileSync(req.file.path);
+    const pdfText = pdfBuffer.toString('latin1');
+    
+    // Extract XMP metadata
+    const xmpMatch = pdfText.match(/vocabularyData>([^<]+)<\/custom:vocabularyData/);
+    
+    if (xmpMatch && xmpMatch[1]) {
+      // Unescape XML entities
+      const unescapedXml = xmpMatch[1]
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'");
+      
+      const categories = JSON.parse(unescapedXml);
+      
+      fs.unlinkSync(req.file.path);
+      
+      res.json({
+        success: true,
+        categories: categories,
+        count: Object.values(categories).reduce((sum, cat) => sum + (cat.words ? cat.words.length : 0), 0),
+        message: 'Successfully extracted vocabulary from PDF'
+      });
+    } else {
+      fs.unlinkSync(req.file.path);
+      res.status(400).json({ error: 'No vocabulary data found in PDF. Make sure it was exported from this application.' });
+    }
+  } catch (error) {
+    console.error('Error parsing PDF:', error);
+    try {
+      if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+    } catch (e) {}
+    res.status(500).json({ error: 'Error processing PDF: ' + error.message });
   }
-
-  try {
-    fs.unlinkSync(req.file.path);
-  } catch (e) {}
-  
-  res.status(400).json({ error: 'Please use the JSON import option instead' });
 });
 
 initializeData();
