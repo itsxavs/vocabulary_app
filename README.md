@@ -1,74 +1,172 @@
-# Vocabulario Inglés - Español
+# English - Spanish Vocabulary Manager
 
-Aplicación web intuitiva para gestionar vocabulario en inglés con traducciones al español, organizado por categorías, con descarga en PDF.
+A modern, intuitive web application to manage, organize, and export English-Spanish vocabulary with beautiful PDF generation.
 
-## Características
+## ✨ Features
 
-✅ **Gestión de Categorías**: Crea y organiza palabras por temas  
-✅ **Añadir Palabras**: Agrega palabras en inglés con sus traducciones  
-✅ **Descargar PDF**: Exporta todo el vocabulario en un PDF bien formateado  
-✅ **Interfaz Intuitiva**: Diseño moderno y fácil de usar  
-✅ **Almacenamiento Local**: Los datos se guardan en JSON
+- **📚 Category Management** - Create, edit, and organize vocabulary by categories
+- **🎨 Color Coding** - Assign custom colors to each category for visual organization
+- **📝 Word Management** - Add, edit, and delete words with English and Spanish translations
+- **🔄 Drag & Drop** - Reorder categories by dragging
+- **📥 Download PDF** - Generate professional, visually appealing PDFs with your vocabulary
+- **💾 Export/Import JSON** - Backup and restore your vocabulary data
+- **🎯 Responsive Design** - Works on desktop and mobile devices
+- **🌐 Fully in English** - Complete English interface
 
-## Instalación
+## 🚀 Quick Start
 
-1. **Instalar dependencias**:
+### Prerequisites
+- Node.js (v14 or higher)
+- npm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/vocabulary-manager.git
+cd vocabulary-manager
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. **Iniciar el servidor**:
+3. Start the server:
 ```bash
 npm start
 ```
 
-3. **Abrir en el navegador**:
+4. Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
 
-## Uso
+## 📖 Usage
 
-### Crear una Categoría
-1. En el panel izquierdo, escribe el nombre de la categoría (ej: "Animales", "Comida")
-2. Haz clic en "+ Categoría"
+### Creating a Category
+1. Enter a category name (e.g., "Animals", "Food")
+2. Select a color for visual identification
+3. Click "Create"
 
-### Añadir Palabras
-1. Selecciona una categoría de la lista
-2. Escribe la palabra en inglés
-3. Escribe la traducción en español
-4. Haz clic en "+ Añadir" o presiona Enter
+### Adding Words
+1. Select a category
+2. Enter the English word
+3. Enter the Spanish translation
+4. Click "+ Add" or press Enter
 
-### Descargar PDF
-1. Haz clic en "📥 Descargar PDF"
-2. Se descargará un archivo con todas las palabras organizadas por categorías
+### Editing
+- **Edit Category**: Click the ✎ button next to a category name
+- **Edit Word**: Click on any word card to open the edit dialog
 
-### Eliminar
-- **Palabra**: Haz clic en "Eliminar" en la tarjeta de la palabra
-- **Categoría**: Haz clic en "✕" junto al nombre de la categoría
+### Organizing
+- **Reorder Categories**: Drag and drop categories to change their order
+- **Change Category Color**: Click the color picker in the category header
 
-## Estructura del Proyecto
+### Exporting
+- **Download PDF**: Creates a professional PDF with all vocabulary organized by category
+- **Download JSON**: Exports your data as JSON for backup
+
+### Importing
+- **Import JSON**: Upload a previously exported JSON file to restore your vocabulary
+
+## 📁 Project Structure
 
 ```
-.
-├── server.js              # Servidor Express
-├── package.json           # Dependencias
-├── vocabulary.json        # Base de datos (se crea automáticamente)
+vocabulary-manager/
+├── server.js              # Express server and API routes
+├── package.json           # Project dependencies
+├── vocabulary.json        # Data storage (auto-generated)
+├── README.md             # This file
 └── public/
-    ├── index.html         # Interfaz HTML
-    ├── styles.css         # Estilos
-    └── app.js             # Lógica del cliente
+    ├── index.html        # Main HTML interface
+    ├── app.js            # Frontend JavaScript
+    └── styles.css        # Styling
 ```
 
-## Tecnologías
+## 🔧 API Endpoints
 
-- **Backend**: Node.js + Express
-- **Frontend**: HTML5 + CSS3 + JavaScript
-- **PDF**: pdfkit
-- **Almacenamiento**: JSON
+### Categories
+- `GET /api/vocabulary` - Get all categories and words
+- `POST /api/category` - Create a new category
+- `PUT /api/category/:name` - Update category name
+- `PUT /api/category/:name` - Update category color
+- `DELETE /api/category/:name` - Delete a category
+- `POST /api/reorder-categories` - Reorder categories
 
-## Notas
+### Words
+- `POST /api/word` - Add a word to a category
+- `PUT /api/word/:category/:index` - Edit a word
+- `DELETE /api/word/:category/:index` - Delete a word
 
-- Los datos se guardan automáticamente en `vocabulary.json`
-- La aplicación funciona sin necesidad de base de datos
-- Responsive design para dispositivos móviles
+### Export
+- `GET /api/download-pdf` - Download vocabulary as PDF
+- `POST /api/import-pdf` - Import from PDF (placeholder)
+
+## 🎨 PDF Features
+
+The generated PDF includes:
+- **Category Headers** - With custom colors for each category
+- **Organized Layout** - Words displayed in a clean, readable format
+- **Visual Hierarchy** - English words in bold with category color, Spanish translations in regular text
+- **Compact Design** - Maximizes words per page for efficiency
+- **Professional Appearance** - Perfect for printing or sharing
+
+## 💾 Data Format
+
+### JSON Structure
+```json
+{
+  "categories": {
+    "Unit 1": {
+      "words": [
+        {
+          "english": "such as",
+          "spanish": "por ejemplo"
+        }
+      ],
+      "color": "#667eea",
+      "order": 0
+    }
+  }
+}
+```
+
+## 🛠️ Technologies Used
+
+- **Backend**: Node.js, Express.js
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **PDF Generation**: PDFKit
+- **File Upload**: Multer
+- **Data Storage**: JSON
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## 📧 Support
+
+For issues, questions, or suggestions, please open an issue on GitHub.
+
+## 🎯 Future Enhancements
+
+- [ ] User authentication
+- [ ] Cloud synchronization
+- [ ] Spaced repetition algorithm
+- [ ] Audio pronunciation
+- [ ] Quiz/test mode
+- [ ] Multiple language pairs
+- [ ] Dark mode
+- [ ] Mobile app
+
+---
+
+**Happy Learning! 📚**
