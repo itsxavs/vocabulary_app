@@ -1,58 +1,57 @@
 {
   "categories": {
-    "Unit 1": {
-      "words": [
-        {
-          "english": "such as",
-          "spanish": "por ejempl",
-          "synonyms": [],
-          "examples": []
-        },
-        {
-          "english": "sdfdfsdf",
-          "spanish": "sdfsdf",
-          "synonyms": [],
-          "examples": []
-        },
-        {
-          "english": "fsfdsdf",
-          "spanish": "sdfsdf",
-          "synonyms": [],
-          "examples": []
-        }
-      ],
-      "color": "#667eea",
+    "Unit 1 - People like us": {
+      "words": [],
+      "color": "#08e70c",
       "order": 0
     },
-    "clase 1": {
+    "Extra": {
       "words": [
         {
-          "english": "glasses",
-          "spanish": "gafas",
+          "english": "carry out",
+          "spanish": "realizar",
           "synonyms": [],
           "examples": []
         },
         {
-          "english": "sdfsdf",
-          "spanish": "sdfsd",
+          "english": "vague",
+          "spanish": "impreciso",
           "synonyms": [],
           "examples": []
-        }
-      ],
-      "color": "#ea6674",
-      "order": 1
-    },
-    "Uni 2": {
-      "words": [
+        },
         {
-          "english": "dfds",
-          "spanish": "sdds",
+          "english": "hierarchy",
+          "spanish": "jerarquia",
+          "synonyms": [],
+          "examples": []
+        },
+        {
+          "english": "such as",
+          "spanish": "por ejemplo",
+          "synonyms": [],
+          "examples": []
+        },
+        {
+          "english": "to come up with",
+          "spanish": "investigar",
+          "synonyms": [],
+          "examples": []
+        },
+        {
+          "english": "invest",
+          "spanish": "invertir",
+          "synonyms": [],
+          "examples": []
+        },
+        {
+          "english": "perceive",
+          "spanish": "percibir",
           "synonyms": [],
           "examples": []
         }
       ],
-      "color": "#bc66ea",
-      "order": 2
+      "color": "#e408e7",
+      "order": 1
     }
   }
 }

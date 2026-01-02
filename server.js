@@ -260,7 +260,7 @@ app.get('/api/download-pdf', (req, res) => {
       
       // Arrow separator in category color
       doc.fontSize(11).fillColor(color).font('Helvetica');
-      doc.text('  ➜  ', { continued: true });
+      doc.text('  :  ', { continued: true });
       
       // Spanish translation (regular, not bold, black)
       doc.fontSize(12).font('Helvetica').fillColor('#333');
