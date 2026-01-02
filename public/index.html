@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English - Spanish Vocabulary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 English - Spanish Vocabulary</h1>
+      <p>Manage your vocabulary and download as PDF</p>
+    </header>
+
+    <div class="main-content">
+      <!-- Control Panel -->
+      <aside class="sidebar">
+        <div class="section">
+          <h3>➕ New Category</h3>
+          <div class="form-group">
+            <input type="text" id="categoryInput" placeholder="Name (e.g: Animals, Food)">
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <label style="font-size: 0.9em; color: #666;">Color:</label>
+              <input type="color" id="categoryColor" value="#667eea" style="width: 45px; height: 38px; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; padding: 2px;">
+              <button onclick="addCategory()" class="btn btn-primary" style="flex: 1;">Create</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>📥 Downloads</h3>
+          <button onclick="downloadPDF()" class="btn btn-success" style="margin-bottom: 8px;">📄 Download PDF</button>
+          <button onclick="downloadJSON()" class="btn btn-info">💾 Download JSON</button>
+        </div>
+
+        <div class="section">
+          <h3>📤 Import</h3>
+          <button onclick="document.getElementById('importFile').click()" class="btn btn-info">📂 Import JSON</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+          <p style="font-size: 0.85em; color: #999; margin-top: 8px;">Upload a JSON file to restore categories and words</p>
+        </div>
+
+        <div class="section">
+          <h3>📚 Categories</h3>
+          <p style="font-size: 0.85em; color: #999; margin-bottom: 10px;">Drag to reorder</p>
+          <div id="categoriesList" class="categories-list" draggable="true"></div>
+        </div>
+      </aside>
+
+      <!-- Main Area -->
+      <main class="content">
+        <div id="mainArea">
+          <div class="empty-state">
+            <p>👈 Select a category or create a new one</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

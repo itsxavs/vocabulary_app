@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "Unit 1": {
+      "words": [
+        {
+          "english": "such as",
+          "spanish": "por ejempl"
+        },
+        {
+          "english": "sdfdfsdf",
+          "spanish": "sdfsdf"
+        },
+        {
+          "english": "fsfdsdf",
+          "spanish": "sdfsdf"
+        }
+      ],
+      "color": "#667eea",
+      "order": 0
+    },
+    "clase 1": {
+      "words": [
+        {
+          "english": "glasses",
+          "spanish": "gafas"
+        },
+        {
+          "english": "sdfsdf",
+          "spanish": "sdfsd"
+        }
+      ],
+      "color": "#ea6674",
+      "order": 1
+    },
+    "Uni 2": {
+      "words": [
+        {
+          "english": "dfds",
+          "spanish": "sdds"
+        }
+      ],
+      "color": "#bc66ea",
+      "order": 2
+    }
+  }
+}
